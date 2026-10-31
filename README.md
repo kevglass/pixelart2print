@@ -23,6 +23,7 @@ Drop, paste or choose an image or sprite sheet. A small sample sheet (a pumpkin 
 | `npm run preview` | Serve the built app, including the Bambu Studio bridge |
 | `npm test` | Unit tests (colour maths, pixel extraction, geometry, exports) |
 | `npm run build:paints` | Regenerate the paint list from the source dataset |
+| `npm run deploy` | Test, build and upload to cokeandcode.com ([below](#deploying)) |
 
 ### Open in Bambu Studio
 
@@ -39,6 +40,12 @@ Bambu Studio opens models from a link, but only by downloading a `.3mf` from an 
 - A project file that only names the presets is not enough: Bambu Studio's loader and slicer crash on one.
 - The presets in use are shown under the preview. Both the **3MF** button and **Open in Bambu Studio** use them.
 - Without Bambu Studio, or when hosted as static files, the 3MF is plain, and the button downloads it instead.
+
+### Deploying
+
+`npm run deploy` (or `./deploy.sh`) runs the tests, builds the site and uploads it with `rsync --delete` to `kevglass@cokeandcode.com:cokeandcode.com/pixelart2print`, served at https://cokeandcode.com/pixelart2print/. It needs SSH access to that account.
+
+The hosted app has no dev server behind it, so **Open in Bambu Studio** downloads the 3MF instead of opening it directly, and the file is a plain 3MF. Run the app locally to get both.
 
 ## Using it
 

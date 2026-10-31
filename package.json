@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc",
-    "build:paints": "node scripts/build-paints.mjs"
+    "build:paints": "node scripts/build-paints.mjs",
+    "deploy": "./deploy.sh"
   },
   "author": "",
   "license": "MIT",
