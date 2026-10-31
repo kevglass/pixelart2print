@@ -1,0 +1,533 @@
+:root {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --text: #1d2025;
+  --muted: #646b76;
+  --border: #dde0e5;
+  --accent: #d2571a;
+  --accent-text: #ffffff;
+  --warn-bg: #fff4e5;
+  --warn-text: #7a4a00;
+  --input-bg: #ffffff;
+  --checker-a: #e6e8ec;
+  --checker-b: #f7f8fa;
+  --radius: 10px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131417;
+    --panel: #1d1f24;
+    --text: #e8e9ec;
+    --muted: #9aa1ac;
+    --border: #30333a;
+    --accent: #f07a38;
+    --accent-text: #1a0d05;
+    --warn-bg: #3a2a12;
+    --warn-text: #ffd59e;
+    --input-bg: #15171b;
+    --checker-a: #24272d;
+    --checker-b: #1b1d22;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin: 0 0 4px;
+}
+
+h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+a {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85em;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  align-self: start;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.controls section {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+.drop {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+}
+
+.drop:hover,
+.drop.over {
+  border-color: var(--accent);
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 110px 80px 1fr;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.field small {
+  color: var(--muted);
+  font-size: 0.8em;
+}
+
+.field select {
+  grid-column: span 2;
+}
+
+input[type='number'],
+select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.check {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.segmented {
+  display: inline-flex;
+}
+
+.segmented button {
+  border-radius: 0;
+}
+
+.segmented button:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.segmented button:last-child {
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+
+.segmented button.active {
+  background: var(--text);
+  color: var(--panel);
+}
+
+.sheet {
+  display: flex;
+  justify-content: center;
+}
+
+.sheet canvas {
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+  border-radius: 4px;
+}
+
+.sheet canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#sprite-label {
+  min-width: 8em;
+  text-align: center;
+}
+
+.viewer {
+  height: min(60vh, 560px);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.viewer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stats {
+  margin: 8px 0 0;
+}
+
+.warnings {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+
+.warnings li {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+/* --- Guide ------------------------------------------------------------- */
+
+.guide h3 {
+  margin: 24px 0 8px;
+  font-size: 1.1rem;
+}
+
+.guide-header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.guide-header h2 {
+  font-size: 1.3rem;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  margin: 0;
+}
+
+.guide-art {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.paint-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.paint-table th,
+.paint-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.paint-table th {
+  font-size: 0.8em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.paint-table tbody tr {
+  cursor: pointer;
+}
+
+.paint-table tr.active,
+.legend-item.active,
+.colour-step.active {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.right {
+  text-align: right !important;
+}
+
+.notes {
+  font-size: 0.9em;
+}
+
+.swatches {
+  white-space: nowrap;
+}
+
+.swatch {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid #0003;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.arrow {
+  margin: 0 6px;
+  color: var(--muted);
+}
+
+.num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border-radius: 12px;
+  border: 1px solid #0003;
+  font-weight: 700;
+  font-size: 0.85em;
+}
+
+.quality {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.quality.excellent,
+.quality.good {
+  color: #2e8b3e;
+}
+
+.quality.fair {
+  color: #b7791f;
+}
+
+.quality.poor {
+  color: #c53030;
+}
+
+.checklist li,
+.steps > li {
+  margin-bottom: 8px;
+}
+
+.chart {
+  width: 100%;
+  max-height: 85vh;
+  display: block;
+  margin: 8px 0;
+}
+
+.chart .axis {
+  font-size: 9px;
+  fill: var(--muted);
+  font-family: system-ui, sans-serif;
+  text-anchor: middle;
+}
+
+.chart .cell-num {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.chart .empty {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 2;
+}
+
+.chart g.cell {
+  transition: opacity 0.15s;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.legend-item {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 14px;
+  padding-right: 6px;
+}
+
+.colour-steps {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.colour-step {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  break-inside: avoid;
+}
+
+.colour-step img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  flex: none;
+}
+
+.tips p,
+.tips li {
+  max-width: 75ch;
+}
+
+@media screen and (max-width: 860px) {
+  .app {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .controls {
+    position: static;
+    max-height: none;
+  }
+
+  .paint-table th:nth-child(6),
+  .paint-table td:nth-child(6) {
+    display: none;
+  }
+}
+
+/* Print just the painting guide, in light colours. */
+@media print {
+  :root {
+    --bg: #fff;
+    --panel: #fff;
+    --text: #000;
+    --muted: #555;
+    --border: #ccc;
+  }
+
+  .controls,
+  .sheet-card,
+  .viewer-card,
+  .guide-card > .toolbar {
+    display: none !important;
+  }
+
+  .app {
+    display: block;
+    padding: 0;
+  }
+
+  .card {
+    border: none;
+    padding: 0;
+  }
+
+  .page-break {
+    break-before: page;
+  }
+
+  .chart {
+    max-height: 95vh;
+  }
+
+  .colour-step,
+  .paint-table tr {
+    break-inside: avoid;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

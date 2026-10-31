@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pixel Art to Print</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Crect width='2' height='2' fill='%23d2571a'/%3E%3Crect x='2' y='2' width='2' height='2' fill='%23d2571a'/%3E%3Crect x='2' width='2' height='2' fill='%23333'/%3E%3Crect y='2' width='2' height='2' fill='%23333'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="controls">
+        <h1>Pixel art → fridge magnet</h1>
+        <p class="muted small">Turn pixel art into a printable STL and an Army Painter painting guide. Everything runs in your browser.</p>
+
+        <section>
+          <h2>1. Pixel art</h2>
+          <label class="drop" id="drop">
+            <input type="file" id="file" accept="image/*" hidden />
+            <strong>Choose an image</strong> or drop or paste one here
+            <span class="muted small">PNG or GIF with exact pixel colours works best</span>
+          </label>
+          <p id="image-info" class="muted small"></p>
+          <div class="field">
+            <label for="scale">Pixel scale</label>
+            <input id="scale" type="number" min="1" step="1" placeholder="auto" />
+            <small>Screen pixels per art pixel</small>
+          </div>
+          <label class="check"><input id="remove-bg" type="checkbox" /> Remove solid background</label>
+          <div class="field">
+            <label for="max-colours">Max paints</label>
+            <input id="max-colours" type="number" min="2" max="32" value="16" />
+          </div>
+        </section>
+
+        <section>
+          <h2>2. Paints</h2>
+          <label class="check"><input type="checkbox" name="range" value="fanatic" checked /> Warpaints Fanatic</label>
+          <label class="check"><input type="checkbox" name="range" value="warpaints" /> Warpaints (classic)</label>
+          <label class="check"><input id="metallics" type="checkbox" /> Include metallics</label>
+        </section>
+
+        <section>
+          <h2>3. Model</h2>
+          <div class="field">
+            <label for="pixel-size">Pixel size</label>
+            <input id="pixel-size" type="number" min="1" max="20" step="0.5" value="4" /><small>mm</small>
+          </div>
+          <div class="field">
+            <label for="relief">Pixel height</label>
+            <input id="relief" type="number" min="0.2" max="5" step="0.1" value="1" /><small>mm above the grooves</small>
+          </div>
+          <div class="field">
+            <label for="groove">Groove width</label>
+            <input id="groove" type="number" min="0.2" max="3" step="0.1" value="0.6" /><small>mm</small>
+          </div>
+          <div class="field">
+            <label for="base">Base thickness</label>
+            <input id="base" type="number" min="1" max="20" step="0.1" value="4" /><small>mm, back to groove floor</small>
+          </div>
+          <div class="field">
+            <label for="backing">Backing</label>
+            <select id="backing">
+              <option value="silhouette">Follow the art</option>
+              <option value="rectangle">Rectangle</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="border">Border</label>
+            <input id="border" type="number" min="0" max="20" step="0.5" value="0" /><small>mm around the art</small>
+          </div>
+          <label class="check"><input id="merge" type="checkbox" /> No grooves between same-colour pixels</label>
+        </section>
+
+        <section>
+          <h2>4. Magnet</h2>
+          <div class="field">
+            <label for="mag-d">Diameter</label>
+            <input id="mag-d" type="number" min="2" max="40" step="0.5" value="10" /><small>mm</small>
+          </div>
+          <div class="field">
+            <label for="mag-t">Thickness</label>
+            <input id="mag-t" type="number" min="0.5" max="10" step="0.5" value="3" /><small>mm</small>
+          </div>
+          <div class="field">
+            <label for="mag-count">How many</label>
+            <select id="mag-count">
+              <option value="auto">Auto</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="mag-clear">Fit clearance</label>
+            <input id="mag-clear" type="number" min="0" max="1" step="0.05" value="0.15" /><small>mm</small>
+          </div>
+        </section>
+      </aside>
+
+      <main>
+        <section class="card sheet-card">
+          <div class="toolbar">
+            <span class="muted small">Click a sprite or drag to select an area. Arrow keys step through sprites.</span>
+            <span class="spacer"></span>
+            <button type="button" id="sprite-prev" class="sprite-step" aria-label="Previous sprite">◀</button>
+            <span id="sprite-label" class="small"></span>
+            <button type="button" id="sprite-next" class="sprite-step" aria-label="Next sprite">▶</button>
+            <button type="button" id="select-all">Whole image</button>
+          </div>
+          <div class="sheet"><canvas id="sheet" aria-label="Uploaded image; click a sprite or drag to select"></canvas></div>
+        </section>
+
+        <section class="card viewer-card">
+          <div class="toolbar">
+            <div class="segmented" role="group" aria-label="Preview">
+              <button type="button" data-mode="painted" class="active">Painted</button>
+              <button type="button" data-mode="printed">Printed</button>
+            </div>
+            <button type="button" id="view-front">Front</button>
+            <button type="button" id="view-back">Back</button>
+            <span class="spacer"></span>
+            <button type="button" id="download-stl" class="export" disabled>STL</button>
+            <button type="button" id="download-3mf" class="export" disabled>3MF</button>
+            <button type="button" id="open-bambu" class="export primary" disabled>Open in Bambu Studio</button>
+          </div>
+          <div id="viewer" class="viewer"></div>
+          <p id="model-stats" class="muted small stats"></p>
+          <p id="bambu-info" class="muted small stats"></p>
+          <ul id="warnings" class="warnings"></ul>
+        </section>
+
+        <section class="card guide-card">
+          <div class="toolbar">
+            <span class="muted small">Painting guide</span>
+            <span class="spacer"></span>
+            <button type="button" id="print">Print / save as PDF</button>
+          </div>
+          <div id="guide" class="guide"></div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

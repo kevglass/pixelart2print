@@ -1,0 +1,29 @@
+{
+  "name": "pixelart2print",
+  "version": "1.0.0",
+  "description": "Turn pixel art into a 3D-printable fridge magnet STL plus an Army Painter painting guide",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc",
+    "build:paints": "node scripts/build-paints.mjs"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "manifold-3d": "^3.5.4",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/three": "^0.187.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "type": "module",
+  "private": true
+}
